@@ -2,5 +2,18 @@
 name = "harmony_server"
 version = "0.1.0"
 edition = "2021"
+authors = ["SoapyDev <alexandre.beauchamp.thibault@gmail.com>"]
+
+[lib]
+path = "src/lib.rs"
+
+
+[[bin]]
+path = "src/main.rs"
+name = "harmony_server"
+
 
 [dependencies]
+actix-web = "^4"
+tokio = { version = "^1", features = ["macros", "rt-multi-thread"] }
+reqwest = "^0.12"
