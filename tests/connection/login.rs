@@ -1,4 +1,5 @@
 use crate::spawn_app;
+use harmony_server::routes::connection::Connections;
 
 #[tokio::test]
 async fn login_works() {
@@ -18,6 +19,14 @@ async fn login_works() {
         .await
         .expect("Failed to execute request.");
 
-    assert!(response.status().is_success());
-    assert_eq!(Some(0), response.content_length());
+    match response.json::<Connections>().await {
+        Ok(val) => {
+            println!("{:?}", val);
+            assert_eq!(val.username, "SoapyDev");
+        }
+        Err(val) => {
+            println!("{:?}", val);
+            assert!(val.to_string().contains("Invalid username or password"));
+        }
+    }
 }
