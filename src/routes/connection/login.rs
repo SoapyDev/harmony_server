@@ -48,7 +48,7 @@ pub(crate) async fn login(data: web::Json<UserLogin>, pool: web::Data<PgPool>) -
             HttpResponse::Ok().json(connection)
         }
         None => {
-            return HttpResponse::InternalServerError().body("Failed to create connection");
+            return HttpResponse::InternalServerError().body("Failed to retrieve connection".to_owned());
         }
     }
 }
