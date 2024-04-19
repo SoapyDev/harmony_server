@@ -5,13 +5,13 @@ use tracing::Instrument;
 use crate::routes::connection::{Connections, User};
 
 use uuid::{Timestamp, Uuid};
+use secrecy::{Secret, ExposeSecret};
 
 
 #[tracing::instrument(name="Login user", 
     skip(data, pool),
     fields(
         username = %data.username, 
-        password = %data.password,
     ))]
 
 pub(crate) async fn login(data: web::Json<UserLogin>, pool: web::Data<PgPool>) -> impl Responder {
@@ -59,7 +59,6 @@ pub(crate) async fn login(data: web::Json<UserLogin>, pool: web::Data<PgPool>) -
     skip(result, pool),
     fields(
         username = %result.username,
-        password = %result.password
 ))]
 
 async fn create_connection(result: &User, pool: &web::Data<PgPool>) -> Result<(), &'static str> {
@@ -95,7 +94,6 @@ async fn create_connection(result: &User, pool: &web::Data<PgPool>) -> Result<()
     skip(data, pool),
     fields(
         username = %data.username,
-        password = %data.password
 ))]
 
 async fn get_user_if_exists(
@@ -106,7 +104,7 @@ async fn get_user_if_exists(
         User,
         r#"SELECT * FROM users WHERE username = $1 AND password = $2"#,
         data.username,
-        data.password
+        data.password.expose_secret()
     )
     .fetch_one(pool.get_ref())
     .instrument(tracing::Span::current())
@@ -130,7 +128,6 @@ async fn get_user_if_exists(
     skip(result, pool),
     fields(
         username = %result.username,
-        password = %result.password
 ))]
 
 async fn get_connection_if_exists(result: &User, pool: &web::Data<PgPool>) -> Option<Connections> {
@@ -156,5 +153,5 @@ async fn get_connection_if_exists(result: &User, pool: &web::Data<PgPool>) -> Op
 #[derive(serde::Deserialize)]
 pub(crate) struct UserLogin {
     username: String,
-    password: String,
+    password: Secret<String>,
 }

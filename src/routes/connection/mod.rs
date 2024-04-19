@@ -3,6 +3,7 @@ mod health_check;
 mod login;
 
 use actix_web::web;
+use secrecy::{ExposeSecret, SecretString};
 
 pub(crate) fn config(config: &mut web::ServiceConfig) {
     config
@@ -11,15 +12,17 @@ pub(crate) fn config(config: &mut web::ServiceConfig) {
         .route("/login", web::post().to(login::login));
 }
 
-#[derive(Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct User {
     id: i32,
-    first_name: String,
-    last_name: String,
+    first_name: SecretString,
+    last_name: SecretString,
     username: String,
-    password: String,
-    email: String,
-    phone: String,
+    #[serde(serialize_with = "serialize_secret_string")]
+    password: SecretString,
+    email: SecretString,
+    phone: SecretString,
     role: String,
     birth_date: chrono::NaiveDate,
     starting_date: chrono::NaiveDate,
@@ -27,9 +30,20 @@ pub struct User {
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct Connections {
     pub id: String,
     pub username: String,
     pub created_at: chrono::NaiveDateTime,
     pub expires_at: chrono::NaiveDateTime,
+}
+
+pub(crate) fn serialize_secret_string<S>(
+    secret: &SecretString,
+    serializer: S,
+) -> Result<S::Ok, S::Error>
+where
+    S: serde::Serializer,
+{
+    serializer.serialize_str(&secret.expose_secret())
 }
