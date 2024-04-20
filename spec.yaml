@@ -13,6 +13,6 @@ services:
       http_path: /health_check
     http_port: 8000
     instance_count: 1
-    instance_size_slug: s-1vcpu-512mb-10gb
+    instance_size_slug: basic-xxs
     routes:
       - path: /
