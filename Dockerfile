@@ -5,7 +5,7 @@ FROM lukemathwalker/cargo-chef:latest-rust-1 AS chef
 WORKDIR /app
 
 # Install lld and mold
-RUN apt update && apt install clang mold -y
+RUN apt update && apt-get install clang mold -y
 
 
 FROM chef as planner
