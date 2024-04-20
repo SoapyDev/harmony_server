@@ -1,7 +1,7 @@
 -- Add migration script here
 
 CREATE TABLE transactions (
-	id uuid DEFAULT gen_randaom_uuid(),
+	id uuid NOT NULL,
 	beneficiary_id INT NOT NULL,
 	category_id SMALLINT NOT NULL,
 	username TEXT NOT NULL,
