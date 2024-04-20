@@ -1,7 +1,7 @@
 -- Add migration script here
 
 CREATE TABLE transactions (
-	id uuid NOT NULL DEFAULT gen_random_uuid(),
+	id uuid DEFAULT gen_randaom_uuid(),
 	beneficiary_id INT NOT NULL,
 	category_id SMALLINT NOT NULL,
 	username TEXT NOT NULL,
