@@ -2,6 +2,7 @@ use secrecy::{ExposeSecret, Secret};
 use serde::Deserialize;
 use serde_aux::field_attributes::deserialize_number_from_string;
 use sqlx::postgres::{PgConnectOptions, PgSslMode};
+use sqlx::ConnectOptions;
 
 #[derive(Debug, Deserialize)]
 pub struct Settings {
@@ -86,13 +87,13 @@ impl TryFrom<String> for Environment {
 
 impl DatabaseSettings {
     pub fn with_db(&self) -> PgConnectOptions {
-        let mut options = self.without_db().database(&self.database_name);
-        options.log_statements(tracing::log::LevelFilter::Trace);
+        let options = self.without_db().database(&self.database_name);
+        let options = options.log_statements(tracing::log::LevelFilter::Trace);
         options
     }
 
     pub fn without_db(&self) -> PgConnectOptions {
-        if self.require_ssl {
+        let ssl_mode = if self.require_ssl {
             PgSslMode::Require
         } else {
             PgSslMode::Prefer
@@ -102,6 +103,6 @@ impl DatabaseSettings {
             .username(&self.username)
             .password(&self.password.expose_secret())
             .port(self.port)
-            .ssl_mode(self.require_ssl)
+            .ssl_mode(ssl_mode)
     }
 }
