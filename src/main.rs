@@ -16,6 +16,9 @@ async fn main() -> Result<(), std::io::Error> {
     let connection = PgPool::connect_lazy(&settings.database.connection_string().expose_secret())
         .expect("Failed to create Postgres pool.");
 
-    let listener = TcpListener::bind(format!("127.0.0.1:{}", settings.application.port))?;
+    let listener = TcpListener::bind(format!(
+        "{}:{}",
+        settings.application.host, settings.application.port
+    ))?;
     run(listener, connection)?.await
 }
