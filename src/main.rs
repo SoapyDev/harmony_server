@@ -1,6 +1,5 @@
 use harmony_server::configurations::get_configuration;
 use harmony_server::startup::run;
-use secrecy::ExposeSecret;
 use sqlx::PgPool;
 use std::net::TcpListener;
 
@@ -13,8 +12,7 @@ async fn main() -> Result<(), std::io::Error> {
     // Get configuration file
     let settings = get_configuration().expect("Failed to read configuration.");
 
-    let connection = PgPool::connect_lazy(&settings.database.connection_string().expose_secret())
-        .expect("Failed to create Postgres pool.");
+    let connection = PgPool::connect_lazy_with(settings.database.with_db());
 
     let listener = TcpListener::bind(format!(
         "{}:{}",
