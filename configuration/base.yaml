@@ -5,4 +5,4 @@ database:
   port: 6543
   username: "postgres"
   password: "password"
-  database_name: "harmony_db"
+  database_name: "harmony-db"
