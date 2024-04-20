@@ -114,8 +114,8 @@ async fn get_user_if_exists(
             tracing::info!("User found : {:?}", user);
             Ok(user)
         },
-        Err(_) => {
-            tracing::error!("Invalid username or password");
+        Err(e) => {
+            tracing::error!("Invalid username or password : {}", e.to_string());
             Err("Invalid username or password")
         },
     }

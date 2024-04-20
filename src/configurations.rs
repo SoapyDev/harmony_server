@@ -87,14 +87,6 @@ impl TryFrom<String> for Environment {
 
 impl DatabaseSettings {
     pub fn with_db(&self) -> PgConnectOptions {
-        println!(
-            "Connecting to Postgres on {}:{} with user {} : {}, database : {}",
-            self.host,
-            self.port,
-            self.username,
-            self.password.expose_secret(),
-            self.database_name
-        );
         let options = self.without_db().database(&self.database_name);
         let options = options.log_statements(tracing::log::LevelFilter::Trace);
         options
