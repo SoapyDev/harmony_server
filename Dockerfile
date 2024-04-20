@@ -10,6 +10,9 @@ RUN apt update && apt install lld clang mold -y
 # Copy source code
 COPY . .
 
+#Force SQLX to read metadata
+ENV SQLX_OFFLINE=true
+
 # Build in releace mode
 RUN cargo build --release
 
