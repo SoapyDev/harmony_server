@@ -37,10 +37,10 @@ FROM  debian:bookworm-slim AS runtime
 WORKDIR /app
 
 # Install OpenSSL, Ca-certificates && clean up
-RUN apt update -y \
-	&& apt install -y --no-install-recommends openssl ca-certificates \
-	&& apt autoremove -y \
-	&& apt clean -y \
+RUN apt-get update -y \
+	&& apt-get install -y --no-install-recommends openssl ca-certificates \
+	&& apt-get autoremove -y \
+	&& apt-get clean -y \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Copy source code
