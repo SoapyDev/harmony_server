@@ -14,5 +14,3 @@ CREATE TABLE users (
 	created_at TIMESTAMP NOT NULL DEFAULT now() 
 );
 
-INSERT INTO users (first_name, last_name, username, password, email, phone, role, birth_date)
-VALUES ('Alex', 'BT', 'SoapyDev', 'Abea357!', 'alexandre.beauchamp.thibault@gmail.com', '', 'dev', '1994-08-14');
