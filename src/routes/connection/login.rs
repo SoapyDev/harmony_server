@@ -11,7 +11,7 @@ use secrecy::{Secret, ExposeSecret};
 #[tracing::instrument(name="Login user", 
     skip(data, pool),
     fields(
-        username = %data.username, 
+        username = %data.user, 
     ))]
 
 pub(crate) async fn login(data: web::Json<UserLogin>, pool: web::Data<PgPool>) -> impl Responder {
@@ -19,7 +19,7 @@ pub(crate) async fn login(data: web::Json<UserLogin>, pool: web::Data<PgPool>) -
     let result = match get_user_if_exists(&data, &pool).await{
         Ok(user) => user,
         Err(_) => {
-            return HttpResponse::Unauthorized().body("Invalid username or password");
+            return HttpResponse::Unauthorized().body("Information invalide");
         }
     };
 
@@ -36,8 +36,8 @@ pub(crate) async fn login(data: web::Json<UserLogin>, pool: web::Data<PgPool>) -
         .await
     {
         Ok(_) => {}
-        Err(e) => {
-            return HttpResponse::InternalServerError().body("Failed to create connection: ".to_owned() + e);
+        Err(_) => {
+            return HttpResponse::InternalServerError().body("Incapable de creer une connection".to_owned());
         }
     };
 
@@ -48,7 +48,7 @@ pub(crate) async fn login(data: web::Json<UserLogin>, pool: web::Data<PgPool>) -
             HttpResponse::Ok().json(connection)
         }
         None => {
-            return HttpResponse::InternalServerError().body("Failed to retrieve connection".to_owned());
+            return HttpResponse::InternalServerError().body("Incapable de retrouver une connection".to_owned());
         }
     }
 }
@@ -80,7 +80,7 @@ async fn create_connection(result: &User, pool: &web::Data<PgPool>) -> Result<()
         },
         Err(e) => {
             tracing::error!("{}",format!("Failed to create connection : {}", e.to_string()));
-            Err("Failed to create connection")
+            Err("")
         },
     }
 }
@@ -93,7 +93,7 @@ async fn create_connection(result: &User, pool: &web::Data<PgPool>) -> Result<()
     name="Get user from database if exists", 
     skip(data, pool),
     fields(
-        username = %data.username,
+        username = %data.user,
 ))]
 
 async fn get_user_if_exists(
@@ -102,8 +102,8 @@ async fn get_user_if_exists(
 ) -> Result<User, &'static str> {
     match sqlx::query_as!(
         User,
-        r#"SELECT * FROM users WHERE username = $1 AND password = $2"#,
-        data.username,
+        r#"SELECT * FROM users WHERE username = $1 OR email = $1 AND password = $2"#,
+        data.user,
         data.password.expose_secret()
     )
     .fetch_one(pool.get_ref())
@@ -152,6 +152,6 @@ async fn get_connection_if_exists(result: &User, pool: &web::Data<PgPool>) -> Op
 
 #[derive(serde::Deserialize)]
 pub(crate) struct UserLogin {
-    username: String,
+    user: String,
     password: Secret<String>,
 }

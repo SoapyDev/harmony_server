@@ -1,2 +1,3 @@
 /target
 20240421121059_test_data.sql
+migrations/20240421121059_insert_test_data.sql

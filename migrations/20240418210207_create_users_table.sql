@@ -10,7 +10,7 @@ CREATE TABLE users (
 	phone TEXT NOT NULL,
 	role TEXT NOT NULL,
 	birth_date DATE NOT NULL,
-	starting_date DATE DEFAULT CURRENT_DATE,
-	created_at TIMESTAMP DEFAULT now() 
+	starting_date DATE NOT NULL DEFAULT CURRENT_DATE,
+	created_at TIMESTAMP NOT NULL DEFAULT now() 
 );
 

@@ -38,6 +38,7 @@ pub struct Connections {
     pub expires_at: chrono::NaiveDateTime,
 }
 
+#[allow(unused)]
 pub(crate) fn serialize_secret_string<S>(
     secret: &SecretString,
     serializer: S,
