@@ -7,7 +7,7 @@ use harmony_server::telemetry::{get_subscriber, init_subscriber};
 
 #[tokio::main]
 async fn main() -> Result<(), std::io::Error> {
-    let subscriber = get_subscriber("harmony_server".into(), "info".into());
+    let subscriber = get_subscriber("harmony_server".into(), "info".into(), std::io::stdout);
     init_subscriber(subscriber);
     // Get configuration file
     let settings = get_configuration().expect("Failed to read configuration.");

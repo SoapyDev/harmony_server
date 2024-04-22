@@ -2,22 +2,23 @@ use secrecy::{ExposeSecret, Secret};
 use serde::Deserialize;
 use serde_aux::field_attributes::deserialize_number_from_string;
 use sqlx::postgres::{PgConnectOptions, PgSslMode};
-use sqlx::ConnectOptions;
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct Settings {
     pub database: DatabaseSettings,
     pub application: ApplicationSettings,
+    pub redis_uri: Secret<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct ApplicationSettings {
     #[serde(deserialize_with = "deserialize_number_from_string")]
     pub port: u16,
     pub host: String,
+    pub hmac_secret: Secret<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct DatabaseSettings {
     pub username: String,
     pub password: Secret<String>,
@@ -87,9 +88,7 @@ impl TryFrom<String> for Environment {
 
 impl DatabaseSettings {
     pub fn with_db(&self) -> PgConnectOptions {
-        let options = self.without_db().database(&self.database_name);
-        let options = options.log_statements(tracing::log::LevelFilter::Trace);
-        options
+        self.without_db().database(&self.database_name)
     }
 
     pub fn without_db(&self) -> PgConnectOptions {

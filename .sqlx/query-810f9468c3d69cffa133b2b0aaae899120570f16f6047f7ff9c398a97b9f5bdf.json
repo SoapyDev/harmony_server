@@ -1,12 +1,12 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT * FROM users WHERE username = $1 OR email = $1 AND password = $2",
+  "query": "\n        SELECT *\n        FROM users\n        WHERE email = $1\n        ",
   "describe": {
     "columns": [
       {
         "ordinal": 0,
         "name": "id",
-        "type_info": "Int4"
+        "type_info": "Uuid"
       },
       {
         "ordinal": 1,
@@ -20,48 +20,42 @@
       },
       {
         "ordinal": 3,
-        "name": "username",
-        "type_info": "Text"
-      },
-      {
-        "ordinal": 4,
         "name": "password",
         "type_info": "Text"
       },
       {
-        "ordinal": 5,
+        "ordinal": 4,
         "name": "email",
         "type_info": "Text"
       },
       {
-        "ordinal": 6,
+        "ordinal": 5,
         "name": "phone",
         "type_info": "Text"
       },
       {
-        "ordinal": 7,
+        "ordinal": 6,
         "name": "role",
         "type_info": "Text"
       },
       {
-        "ordinal": 8,
+        "ordinal": 7,
         "name": "birth_date",
         "type_info": "Date"
       },
       {
-        "ordinal": 9,
+        "ordinal": 8,
         "name": "starting_date",
         "type_info": "Date"
       },
       {
-        "ordinal": 10,
+        "ordinal": 9,
         "name": "created_at",
         "type_info": "Timestamp"
       }
     ],
     "parameters": {
       "Left": [
-        "Text",
         "Text"
       ]
     },
@@ -75,9 +69,8 @@
       false,
       false,
       false,
-      false,
       false
     ]
   },
-  "hash": "800e4dba9540a4748f7b6ad40b8f202a260b985b6729007df1bdbd4620db2583"
+  "hash": "810f9468c3d69cffa133b2b0aaae899120570f16f6047f7ff9c398a97b9f5bdf"
 }

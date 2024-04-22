@@ -1,8 +1,11 @@
 application:
   port: 8000
+  host: "0.0.0.0"
+  hmac_secret: "92#Ttjs#8f72a825TJgRYQ^t*NYiX92KG$E#eaGukw4o2MzTj&LDZEHW57xZPeTWBr&p^LpHs5U5JXKXa!z##Dk4NdxYL4hTtytbsM@dJdDEU#r3A7DPAGh4fP5cbcED"
 database:
   host: "127.0.0.1"
   port: 6543
   username: "postgres"
   password: "password"
   database_name: "harmony-db"
+redis_uri: "redis://127.0.0.1:6379"
