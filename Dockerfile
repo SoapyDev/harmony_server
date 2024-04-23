@@ -28,7 +28,6 @@ ENV SQLX_OFFLINE=true
 
 # Build in releace mode
 RUN cargo build --release --bin harmony_server
-RUN cargo install bunyan
 
 
 #Runtime stage

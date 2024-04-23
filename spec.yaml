@@ -4,7 +4,6 @@ services:
   - name: harmony-server
     dockerfile_path: Dockerfile
     source_dir: .
-    run_command: ./harmony_server | bunyan
     github:
       branch: main
       deploy_on_push: true
@@ -37,17 +36,12 @@ services:
       - key: APP_REDIS__URI
         scope: RUN_TIME
         value: ${redis-db.REDIS_URL}
-      - key: APP_REDIS_URI
-        scope: RUN_TIME
-        value: ${redis-db.REDIS_URL}
 databases:
   - engine: "PG"
     name: harmony-db
-    num_nodes: 1
     size: db-s-1vcpu-1gb
   - engine: "REDIS"
     name: redis-db
     version: "7"
-    num_nodes: 1
     production: true
     cluster_name: redis-db-cluster
