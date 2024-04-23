@@ -22,6 +22,7 @@ pub struct Application{
 impl Application{
 
     pub async fn build(configuration: Settings) -> Result<Self, anyhow::Error> {
+        println!("{}", configuration.redis_uri.expose_secret());
         
         let connection_pool = get_connection_pool(&configuration.database).await.expect("Failed to connect to postgres");
 
