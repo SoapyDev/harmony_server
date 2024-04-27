@@ -71,7 +71,7 @@ pub async fn run(
             .wrap(
                 Cors::default()
                     .allow_any_header()
-                    .allowed_origin("https://harmony-web-alpha.vercel.app/login")
+                    .allowed_origin(&format!("{}/login",web_uri.expose_secret()))
                     .allowed_methods(vec!["GET", "POST"])
                     .block_on_origin_mismatch(true),
             )
