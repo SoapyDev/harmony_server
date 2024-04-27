@@ -71,7 +71,7 @@ pub async fn run(
             .wrap(
                 Cors::default()
                     .allow_any_header()
-                    .allowed_origin(web_uri.expose_secret())
+                    .allow_any_origin()
                     .allowed_methods(vec!["GET", "POST","PUT","DELETE"])
             )
             .wrap(Compress::default())
