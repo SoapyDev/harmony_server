@@ -85,13 +85,12 @@ pub async fn run(
             .route("/login", web::post().to(login::login))
             .service(
                 web::scope("/app")
+                    .wrap(from_fn(reject_anonymous_users))
                     .wrap(Cors::default()
                         .allow_any_header()
                         .allowed_origin(web_uri.expose_secret())
                         .allowed_methods(vec!["GET","POST","PUT","DELETE"])
-                        .block_on_origin_mismatch(true)
                     )
-                    .wrap(from_fn(reject_anonymous_users))
                     .route(
                         "/beneficiaries",
                         web::get().to(beneficiary::beneficiaries_get::beneficiaries_get),
