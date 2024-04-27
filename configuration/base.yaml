@@ -9,3 +9,4 @@ database:
   password: "password"
   database_name: "harmony-db"
 redis_uri: "redis://127.0.0.1:6379"
+web_uri: "http://127.0.0.1:8000"

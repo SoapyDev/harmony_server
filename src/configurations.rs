@@ -8,6 +8,7 @@ pub struct Settings {
     pub database: DatabaseSettings,
     pub application: ApplicationSettings,
     pub redis_uri: Secret<String>,
+    pub web_uri: Secret<String>,
 }
 
 #[derive(Deserialize, Clone)]

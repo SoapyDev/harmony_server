@@ -15,7 +15,7 @@ impl Password {
         let has_uppercase = s.chars().any(|c| c.is_ascii_uppercase());
         let has_lowercase = s.chars().any(|c| c.is_ascii_lowercase());
 
-        let special_chars = vec!['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '+'];
+        let special_chars = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '+'];
         let has_special = s.chars().any(|c| special_chars.contains(&c));
 
         if is_short

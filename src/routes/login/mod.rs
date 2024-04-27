@@ -21,8 +21,6 @@ pub(crate) async fn login(
     let credentials = data.into_inner();
     match validate_credentials(credentials, &pool).await {
         Ok(user) => {
-            tracing::Span::current().record("user_id", &tracing::field::display(&user.id));
-            session.renew();
             let _ = session
                 .insert_user_id(user.id)
                 .map_err(|e| LoginError::UnexpectedError(e.into()));
@@ -59,12 +57,8 @@ impl std::fmt::Debug for LoginError {
     }
 }
 
-impl Into<actix_web::error::InternalError<LoginError>> for LoginError {
-    fn into(self) -> actix_web::error::InternalError<LoginError> {
-        actix_web::error::InternalError::from_response(
-            self,
-            HttpResponse::InternalServerError().finish().into(),
-        )
-        .into()
+impl Into<InternalError<LoginError>> for LoginError {
+    fn into(self) -> InternalError<LoginError> {
+        InternalError::from_response(self, HttpResponse::InternalServerError().finish())
     }
 }

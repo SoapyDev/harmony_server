@@ -6,6 +6,7 @@ use actix_web::error::InternalError;
 use actix_web::{FromRequest, HttpMessage};
 use actix_web_lab::middleware::Next;
 use std::ops::Deref;
+use tracing_log::log::info;
 use uuid::Uuid;
 
 #[derive(Copy, Clone, Debug)]
@@ -33,6 +34,20 @@ pub async fn reject_anonymous_users(
         let (http_request, payload) = req.parts_mut();
         TypedSession::from_request(http_request, payload).await
     }?;
+
+    match session.get_user_id() {
+        Ok(val) => match val {
+            None => {
+                info!("User id is empty")
+            }
+            Some(id) => {
+                info!("User id : {id}")
+            }
+        },
+        Err(_) => {
+            info!("No user id in session")
+        }
+    };
 
     match session.get_user_id().map_err(e500)? {
         Some(user_id) => {

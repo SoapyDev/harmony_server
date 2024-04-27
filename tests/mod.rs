@@ -1,6 +1,5 @@
 mod allergy;
 mod beneficiary;
-mod connection;
 mod domain;
 mod message;
 mod transaction;
@@ -43,7 +42,14 @@ pub(crate) async fn spawn_app() -> TestApp {
 
     let connection_pool = configure_database(&configuration.database).await;
 
-    let server = run(listener, connection_pool.clone()).expect("Failed to bind address");
+    let server = run(
+        listener,
+        connection_pool.clone(),
+        configuration.application.hmac_secret,
+        configuration.redis_uri,
+        configuration.web_uri,
+    )
+    .expect("Failed to bind address");
 
     let _ = tokio::spawn(server);
 
