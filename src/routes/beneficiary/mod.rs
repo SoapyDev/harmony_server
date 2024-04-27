@@ -1,8 +1,8 @@
-mod beneficiaries_get;
-mod beneficiary_create;
-mod beneficiary_delete;
-mod beneficiary_get;
-mod beneficiary_update;
+pub(crate) mod beneficiaries_get;
+pub(crate) mod beneficiary_create;
+pub(crate) mod beneficiary_delete;
+pub(crate) mod beneficiary_get;
+pub(crate) mod beneficiary_update;
 
 use actix_web::web;
 

@@ -92,7 +92,26 @@ pub async fn run(
                         .block_on_origin_mismatch(true)
                     )
                     .wrap(from_fn(reject_anonymous_users))
-                    .configure(beneficiary::config)
+                    .route(
+                        "/beneficiaries",
+                        web::get().to(beneficiary::beneficiaries_get::beneficiaries_get),
+                    )
+                    .route(
+                        "/beneficiaries",
+                        web::post().to(beneficiary::beneficiary_create::beneficiary_create),
+                    )
+                    .route(
+                        "/beneficiaries/{id}",
+                        web::get().to(beneficiary::beneficiary_get::beneficiary_get),
+                    )
+                    .route(
+                        "/beneficiaries/{id}",
+                        web::put().to(beneficiary::beneficiary_update::beneficiary_update),
+                    )
+                    .route(
+                        "/beneficiaries/{id}",
+                        web::delete().to(beneficiary::beneficiary_delete::beneficiary_delete),
+                    )
                     .configure(allergy::config)
                     .configure(message::config)
                     .configure(transaction::config)
