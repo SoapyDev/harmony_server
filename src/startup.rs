@@ -63,6 +63,7 @@ pub async fn run(
     redis_uri: Secret<String>,
     web_uri: Secret<String>,
 ) -> Result<Server, anyhow::Error> {
+    println!("{}",web_uri.expose_secret());
     let connection = web::Data::new(db_pool);
     let secret_key = Key::from(hmac_secret.expose_secret().as_bytes());
     let redis_store = RedisSessionStore::new(redis_uri.expose_secret()).await?;
