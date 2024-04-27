@@ -71,8 +71,8 @@ pub async fn run(
             .wrap(
                 Cors::default()
                     .allow_any_header()
-                    .allow_any_origin()
-                    .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
+                    .allowed_origin("https://harmony-web-alpha.vercel.app/login")
+                    .allowed_methods(vec!["GET", "POST"])
                     .block_on_origin_mismatch(true),
             )
             .wrap(Compress::default())
@@ -85,6 +85,7 @@ pub async fn run(
             .route("/login", web::post().to(login::login))
             .service(
                 web::scope("/app")
+                    .wrap(Cors::default().allow_any_origin().allow_any_method().allow_any_header())
                     .wrap(from_fn(reject_anonymous_users))
                     .configure(beneficiary::config)
                     .configure(allergy::config)
